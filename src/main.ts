@@ -2,7 +2,7 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 
 const FS_DIFF_SECTION_REGEX = /(<!--- fs:start -->(.+)<!--- fs:end -->)/gs;
-const DIFF_HEADER_REGEX = /(^(.+)\+\+\+ [\w\/\.]+\n)/s;
+const DIFF_HEADER_REGEX = /(^(.+)\+\+\+ [\w\/\.\-]+\n)/s;
 
 (async () => {
   try {
@@ -36,14 +36,17 @@ ${diff.replace(/%0A/gs, '\n').replace(DIFF_HEADER_REGEX, '')}
 
     if (prText) {
       if (diff) {
-        prText = prText.replace(FS_DIFF_SECTION_REGEX, fsDiffText);
+        if (prText.match(FS_DIFF_SECTION_REGEX)) {
+          prText = prText.replace(FS_DIFF_SECTION_REGEX, fsDiffText);
+        } else {
+          prText += fsDiffText;
+        }
       } else {
         prText = prText.replace(FS_DIFF_SECTION_REGEX, '');
       }
     } else {
       if (diff) {
-        prText = fsDiffText;
-      } else {
+        prText += fsDiffText;
       }
     }
 

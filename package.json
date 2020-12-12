@@ -1,7 +1,7 @@
 {
-  "name": "labeler",
+  "name": "fs-diff",
   "version": "3.0.0",
-  "description": "Labels pull requests by files altered",
+  "description": "Add a filesystem diff snippet to your PRs",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc && ncc build lib/main.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/labeler.git"
+    "url": "git+https://github.com/garrettjoecox/fs-diff.git"
   },
   "keywords": [
     "github",
     "actions",
-    "label",
-    "labeler"
+    "fs",
+    "diff"
   ],
-  "author": "GitHub",
+  "author": "Garrett Cox",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.4",

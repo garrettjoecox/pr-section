@@ -1,6 +1,6 @@
-name: 'Labeler'
-description: 'Add labels to new pull requests based on the files that are changed'
-author: 'GitHub'
+name: 'FS Diff'
+description: 'Add a filesystem diff snippet to your PRs'
+author: 'Garrett Cox'
 inputs:
   repo-token:
     description: 'The GITHUB_TOKEN secret'

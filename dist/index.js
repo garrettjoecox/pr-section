@@ -13612,7 +13612,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 const FS_DIFF_SECTION_REGEX = /(<!--- fs:start -->(.+)<!--- fs:end -->)/gs;
-const DIFF_HEADER_REGEX = /(^(.+)\+\+\+ [\w\/\.]+\n)/s;
+const DIFF_HEADER_REGEX = /(^(.+)\+\+\+ [\w\/\.\-]+\n)/s;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -13641,7 +13641,12 @@ ${diff.replace(/%0A/gs, '\n').replace(DIFF_HEADER_REGEX, '')}
         let prText = pullRequest.body + '';
         if (prText) {
             if (diff) {
-                prText = prText.replace(FS_DIFF_SECTION_REGEX, fsDiffText);
+                if (prText.match(FS_DIFF_SECTION_REGEX)) {
+                    prText = prText.replace(FS_DIFF_SECTION_REGEX, fsDiffText);
+                }
+                else {
+                    prText += fsDiffText;
+                }
             }
             else {
                 prText = prText.replace(FS_DIFF_SECTION_REGEX, '');
@@ -13649,9 +13654,7 @@ ${diff.replace(/%0A/gs, '\n').replace(DIFF_HEADER_REGEX, '')}
         }
         else {
             if (diff) {
-                prText = fsDiffText;
-            }
-            else {
+                prText += fsDiffText;
             }
         }
         yield client.pulls.update({
