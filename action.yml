@@ -1,24 +1,16 @@
-name: 'FS Diff'
-description: 'Add a filesystem diff snippet to your PRs'
+name: 'PR Section'
+description: 'Dynamically add markdown to your PR description in sections'
 author: 'Garrett Cox'
 inputs:
   repo-token:
     description: 'The GITHUB_TOKEN secret'
     required: true
+  section-name:
+    description: 'Section to add to PR, should be unique, will not be visible'
+    required: true
+  section-value:
+    description: 'Value to display in this section, should be markdown compatible'
 
 runs:
-  using: 'composite'
-  steps: 
-    - run: |
-        find . -type d \( -name node_modules -o -name .git \) -prune -false -o -name '*' | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/" > $GITHUB_ACTION_PATH/after.txt
-        git fetch --depth=1 origin +refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
-        git checkout refs/remotes/origin/${{ github.base_ref }}
-        find . -type d \( -name node_modules -o -name .git \) -prune -false -o -name '*' | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/" > $GITHUB_ACTION_PATH/before.txt
-        DIFF=$(git --no-pager diff --no-index --unified=6 $GITHUB_ACTION_PATH/before.txt $GITHUB_ACTION_PATH/after.txt || true)
-        DIFF="${DIFF//$'\n'/'%0A'}"
-        echo "INPUT_DIFF=$DIFF" >> $GITHUB_ENV
-      shell: bash
-    - run: node $GITHUB_ACTION_PATH/dist/index.js
-      env:
-        INPUT_REPO-TOKEN: ${{ inputs.repo-token }}
-      shell: bash
+  using: 'node12'
+  main: 'dist/index.js'

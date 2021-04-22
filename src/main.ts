@@ -1,13 +1,11 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-const FS_DIFF_SECTION_REGEX = /(<!--- fs:start -->(.+)<!--- fs:end -->)/gs;
-const DIFF_HEADER_REGEX = /(^(.+)\+\+\+ [\w\/\.\-]+\n)/s;
-
 (async () => {
   try {
     const token = core.getInput('repo-token', { required: false });
-    const diff = core.getInput('diff', { required: false });
+    const sectionName = core.getInput('section-name', { required: true });
+    const sectionValue = core.getInput('section-value', { required: false });
     const client = new github.GitHub(token);
 
     const prNumber = github.context.payload.pull_request?.number;
@@ -22,31 +20,27 @@ const DIFF_HEADER_REGEX = /(^(.+)\+\+\+ [\w\/\.\-]+\n)/s;
       pull_number: prNumber
     });
 
-    const fsDiffText = `<!--- fs:start -->
-<details>
-<summary>File System Diff</summary>
+    const sectionRegex = /(<!--- section:start -->(.+)<!--- section:end -->)/gs;
 
-\`\`\`diff
-${diff.replace(/%0A/gs, '\n').replace(DIFF_HEADER_REGEX, '')}
-\`\`\`
-</details>
-<!--- fs:end -->`;
+    const sectionText = `<!--- section:start -->
+${sectionValue}
+<!--- section:end -->`;
 
     let prText = pullRequest.body + '';
 
     if (prText) {
-      if (diff) {
-        if (prText.match(FS_DIFF_SECTION_REGEX)) {
-          prText = prText.replace(FS_DIFF_SECTION_REGEX, fsDiffText);
+      if (sectionValue) {
+        if (prText.match(sectionRegex)) {
+          prText = prText.replace(sectionRegex, sectionText);
         } else {
-          prText += fsDiffText;
+          prText += sectionText;
         }
       } else {
-        prText = prText.replace(FS_DIFF_SECTION_REGEX, '');
+        prText = prText.replace(sectionRegex, '');
       }
     } else {
-      if (diff) {
-        prText += fsDiffText;
+      if (sectionValue) {
+        prText += '\n\n' + sectionText;
       }
     }
 
