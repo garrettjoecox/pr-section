@@ -1,7 +1,7 @@
 {
-  "name": "fs-diff",
+  "name": "pr-section",
   "version": "3.0.0",
-  "description": "Add a filesystem diff snippet to your PRs",
+  "description": "Dynamically add markdown to your PR description in sections",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc && ncc build lib/main.js",
@@ -11,13 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/garrettjoecox/fs-diff.git"
+    "url": "git+https://github.com/garrettjoecox/pr-section.git"
   },
   "keywords": [
     "github",
     "actions",
-    "fs",
-    "diff"
+    "pr",
+    "section",
+    "markdown"
   ],
   "author": "Garrett Cox",
   "license": "MIT",
