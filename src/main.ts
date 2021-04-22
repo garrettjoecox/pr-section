@@ -20,11 +20,11 @@ import * as github from '@actions/github';
       pull_number: prNumber
     });
 
-    const sectionRegex = /(<!--- section:start -->(.+)<!--- section:end -->)/gs;
+    const sectionRegex = new RegExp(`(<!--- section:${sectionName}:start -->(.+)<!--- section:${sectionName}:end -->)`, 'gs');
 
-    const sectionText = `<!--- section:start -->
+    const sectionText = `<!--- section:${sectionName}:start -->
 ${sectionValue}
-<!--- section:end -->`;
+<!--- section:${sectionName}:end -->`;
 
     let prText = pullRequest.body + '';
 
