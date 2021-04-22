@@ -33,14 +33,14 @@ ${sectionValue}
         if (prText.match(sectionRegex)) {
           prText = prText.replace(sectionRegex, sectionText);
         } else {
-          prText += sectionText;
+          prText += '\n\n' + sectionText;
         }
       } else {
         prText = prText.replace(sectionRegex, '');
       }
     } else {
       if (sectionValue) {
-        prText += '\n\n' + sectionText;
+        prText += sectionText;
       }
     }
 

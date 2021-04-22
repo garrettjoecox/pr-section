@@ -13628,10 +13628,10 @@ const github = __importStar(__webpack_require__(438));
             repo: github.context.repo.repo,
             pull_number: prNumber
         });
-        const sectionRegex = /(<!--- section:start -->(.+)<!--- section:end -->)/gs;
-        const sectionText = `<!--- section:start -->
+        const sectionRegex = new RegExp(`(<!--- section:${sectionName}:start -->(.+)<!--- section:${sectionName}:end -->)`, 'gs');
+        const sectionText = `<!--- section:${sectionName}:start -->
 ${sectionValue}
-<!--- section:end -->`;
+<!--- section:${sectionName}:end -->`;
         let prText = pullRequest.body + '';
         if (prText) {
             if (sectionValue) {
@@ -13639,7 +13639,7 @@ ${sectionValue}
                     prText = prText.replace(sectionRegex, sectionText);
                 }
                 else {
-                    prText += sectionText;
+                    prText += '\n\n' + sectionText;
                 }
             }
             else {
@@ -13648,7 +13648,7 @@ ${sectionValue}
         }
         else {
             if (sectionValue) {
-                prText += '\n\n' + sectionText;
+                prText += sectionText;
             }
         }
         yield client.pulls.update({
