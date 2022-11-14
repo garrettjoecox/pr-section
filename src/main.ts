@@ -6,19 +6,26 @@ import * as github from '@actions/github';
     const token = core.getInput('repo-token', { required: false });
     const sectionName = core.getInput('section-name', { required: true });
     const sectionValue = core.getInput('section-value', { required: false });
+    let prNumber: string | number | undefined = core.getInput('pr-number', { required: false });
     const client = new github.GitHub(token);
 
-    const prNumber = github.context.payload.pull_request?.number;
-    if (!prNumber) {
+    if (typeof prNumber === 'string') prNumber = parseInt(prNumber, 10);
+    if (!prNumber) prNumber = github.context.payload.pull_request?.number;
+    if (!prNumber || isNaN(prNumber)) {
       console.log('Could not get pull request number from context, exiting');
       return;
     }
 
-    const { data: pullRequest } = await client.pulls.get({
+    const { data: pullRequest, status } = await client.pulls.get({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       pull_number: prNumber
     });
+
+    if (status >= 400) {
+      console.log('Could not get pull request from pull request number, exiting');
+      return;
+    }
 
     const sectionRegex = new RegExp(`(<!--- section:${sectionName}:start -->(.+)<!--- section:${sectionName}:end -->)`, 'gs');
 

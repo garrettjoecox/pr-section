@@ -5,6 +5,8 @@ inputs:
   repo-token:
     description: 'The GITHUB_TOKEN secret'
     required: true
+  pr-number:
+    description: 'PR ID to modify description of, this will default to PR that triggered'
   section-name:
     description: 'Section to add to PR, should be unique, will not be visible'
     required: true

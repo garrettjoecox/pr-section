@@ -30,5 +30,6 @@ _Note: This grants access to the `GITHUB_TOKEN` so the action can make calls to 
 | Name | Description | Default |
 | - | - | - |
 | `repo-token`    | Token to use to authorize PR changes. Typically the GITHUB_TOKEN secret | N/A |
+| `pr-number`     | PR ID to modify description of, this will default to PR that triggered  | N/A |
 | `section-name`  | Section to add to PR, should be unique, will not be visible             | N/A |
 | `section-value` | Value to display in this section, should be markdown compatible         | N/A |
